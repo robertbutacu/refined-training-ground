@@ -1,0 +1,5 @@
+package numeric
+
+class NumericRefinement {
+
+}

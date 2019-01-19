@@ -1,0 +1,5 @@
+package collection
+
+class CollectionRefinement {
+
+}
