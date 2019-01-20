@@ -3,7 +3,7 @@ package collection
 import eu.timepit.refined._
 import eu.timepit.refined.api._
 import eu.timepit.refined.boolean.{And, _}
-import eu.timepit.refined.collection.{Contains, Forall, MinSize}
+import eu.timepit.refined.collection.{Contains, Empty, Forall, MinSize, NonEmpty}
 import eu.timepit.refined.generic.Equal
 import eu.timepit.refined.numeric.{Greater, Interval, Positive}
 import shapeless.Nat._0
@@ -56,4 +56,23 @@ object CollectionRefinement extends App {
   val x = refineV[AcceptableInterval](List(10, 20, 30, -10, -20))
 
   println(x)
+
+  // list whereby all elements satisfy a certain predicate
+
+  case class MyClass(s: String, x: Int)
+
+  type MyClassRestrictionOnS = NonEmpty
+  type MyClassRestrictionOnX = Positive
+
+  type MyClassRestrictions = And[MyClassRestrictionOnS, MyClassRestrictionOnX]
+
+  type RefinedMyClass = Refined[MyClass, MyClassRestrictions]
+
+  implicit val myClassValidator: Validate[MyClass, MyClassRestrictions] = Validate.fromPredicate[MyClass, MyClassRestrictions](
+    (m: MyClass) => m.s.nonEmpty && m.x >= 0,
+    (m: MyClass) => "My class doesnt right boii",
+    And(Not(Empty()), Greater(shapeless.nat._0))
+  )
+
+  println(refineV[MyClassRestrictions](MyClass("", 0)))
 }
