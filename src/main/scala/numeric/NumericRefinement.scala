@@ -1,5 +1,5 @@
 package numeric
 
-class NumericRefinement {
+object NumericRefinement extends App {
 
 }
