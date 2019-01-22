@@ -5,7 +5,7 @@ import eu.timepit.refined.api._
 import eu.timepit.refined.boolean.{And, _}
 import eu.timepit.refined.collection.{Contains, Empty, Forall, MinSize, NonEmpty}
 import eu.timepit.refined.generic.Equal
-import eu.timepit.refined.numeric.{Greater, Interval, Positive}
+import eu.timepit.refined.numeric.{Greater, Interval, Negative, Positive}
 import shapeless.Nat._0
 import shapeless.Witness
 
@@ -37,9 +37,9 @@ object CollectionRefinement extends App {
 
   //list with all elements either in [10, 100] interval or [-10, -100]
 
-  type NegativeInterval = Interval.OpenClosed[W.`"""-100"""`.T, W.`"""-10"""`.T]
-  type PositiveInterval = Interval.OpenClosed[W.`"""10"""`.T, W.`"""100"""`.T]
-
+  type NegativeInterval = Interval.Closed[W.`"-100"`.T, W.`"-10"`.T]
+  type PositiveInterval = Interval.Closed[W.`10`.T, W.`100`.T]
+/*
   type AcceptableInterval = Xor[PositiveInterval, NegativeInterval]
 
   type ListInAcceptableInterval = Refined[List[Int], AcceptableInterval]
@@ -55,7 +55,16 @@ object CollectionRefinement extends App {
 
   val x = refineV[AcceptableInterval](List(10, 20, 30, -10, -20))
 
-  println(x)
+  println(x)*/
+
+  //refactored so we dont have to define the validator
+
+  type AcceptableInterval2 = Forall[Or[PositiveInterval, Negative]]
+  type ListInAcceptableInterval2 = Refined[String, AcceptableInterval2]
+
+  val z = refineV[AcceptableInterval2](List(10, 20, 30, -10, -20))
+
+  println(z)
 
   // list whereby all elements satisfy a certain predicate
 
