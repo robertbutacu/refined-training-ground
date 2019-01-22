@@ -1,6 +1,5 @@
 import eu.timepit.refined._
 import eu.timepit.refined.api.{Refined, Validate}
-import eu.timepit.refined.auto._
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.numeric._
 
